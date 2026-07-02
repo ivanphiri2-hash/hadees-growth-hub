@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as KnowledgeHubRouteImport } from './routes/knowledge-hub'
 import { Route as DigitalSolutionsRouteImport } from './routes/digital-solutions'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -18,6 +19,11 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KnowledgeHubRoute = KnowledgeHubRouteImport.update({
   id: '/knowledge-hub',
   path: '/knowledge-hub',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
+    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
+    | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,10 +144,18 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DigitalSolutionsRoute: typeof DigitalSolutionsRoute
   KnowledgeHubRoute: typeof KnowledgeHubRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/knowledge-hub': {
       id: '/knowledge-hub'
       path: '/knowledge-hub'
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DigitalSolutionsRoute: DigitalSolutionsRoute,
   KnowledgeHubRoute: KnowledgeHubRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
