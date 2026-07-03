@@ -15,9 +15,15 @@ import { Route as DigitalSolutionsRouteImport } from './routes/digital-solutions
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as BusinessServicesRouteImport } from './routes/business-services'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedMyLearningRouteImport } from './routes/_authenticated/my-learning'
+import { Route as AuthenticatedLearnCourseIdRouteImport } from './routes/_authenticated/learn.$courseId'
+import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -49,6 +55,11 @@ const BusinessServicesRoute = BusinessServicesRouteImport.update({
   path: '/business-services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AcademyRoute = AcademyRouteImport.update({
   id: '/academy',
   path: '/academy',
@@ -59,45 +70,87 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMyLearningRoute = AuthenticatedMyLearningRouteImport.update({
+  id: '/my-learning',
+  path: '/my-learning',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLearnCourseIdRoute =
+  AuthenticatedLearnCourseIdRouteImport.update({
+    id: '/learn/$courseId',
+    path: '/learn/$courseId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminCoursesRoute =
+  AuthenticatedAdminCoursesRouteImport.update({
+    id: '/admin/courses',
+    path: '/admin/courses',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/my-learning': typeof AuthenticatedMyLearningRoute
+  '/portal': typeof AuthenticatedPortalRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/my-learning': typeof AuthenticatedMyLearningRoute
+  '/portal': typeof AuthenticatedPortalRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
+  '/auth': typeof AuthRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/digital-solutions': typeof DigitalSolutionsRoute
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/my-learning': typeof AuthenticatedMyLearningRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/_authenticated/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,40 +158,58 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/academy'
+    | '/auth'
     | '/business-services'
     | '/client-portal'
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
     | '/sitemap.xml'
+    | '/my-learning'
+    | '/portal'
+    | '/admin/courses'
+    | '/learn/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/academy'
+    | '/auth'
     | '/business-services'
     | '/client-portal'
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
     | '/sitemap.xml'
+    | '/my-learning'
+    | '/portal'
+    | '/admin/courses'
+    | '/learn/$courseId'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/academy'
+    | '/auth'
     | '/business-services'
     | '/client-portal'
     | '/contact'
     | '/digital-solutions'
     | '/knowledge-hub'
     | '/sitemap.xml'
+    | '/_authenticated/my-learning'
+    | '/_authenticated/portal'
+    | '/_authenticated/admin/courses'
+    | '/_authenticated/learn/$courseId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
+  AuthRoute: typeof AuthRoute
   BusinessServicesRoute: typeof BusinessServicesRoute
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
@@ -191,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/academy': {
       id: '/academy'
       path: '/academy'
@@ -205,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -212,13 +297,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-learning': {
+      id: '/_authenticated/my-learning'
+      path: '/my-learning'
+      fullPath: '/my-learning'
+      preLoaderRoute: typeof AuthenticatedMyLearningRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/learn/$courseId': {
+      id: '/_authenticated/learn/$courseId'
+      path: '/learn/$courseId'
+      fullPath: '/learn/$courseId'
+      preLoaderRoute: typeof AuthenticatedLearnCourseIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/courses': {
+      id: '/_authenticated/admin/courses'
+      path: '/admin/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AuthenticatedAdminCoursesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMyLearningRoute: typeof AuthenticatedMyLearningRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
+  AuthenticatedLearnCourseIdRoute: typeof AuthenticatedLearnCourseIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMyLearningRoute: AuthenticatedMyLearningRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
+  AuthenticatedLearnCourseIdRoute: AuthenticatedLearnCourseIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
+  AuthRoute: AuthRoute,
   BusinessServicesRoute: BusinessServicesRoute,
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
@@ -229,13 +361,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
