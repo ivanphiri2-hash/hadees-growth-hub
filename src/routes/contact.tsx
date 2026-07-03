@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { MessageCircle, Mail, Clock, MapPin, ArrowRight, Send } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { PageHero } from "@/components/page-hero";
 import { WHATSAPP_NUMBER, waLink } from "@/lib/company";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -20,9 +22,22 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
+    const { error } = await supabase.from("leads").insert({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      service_interest: form.topic || null,
+      message: form.message.trim() || null,
+      source: "contact_form",
+      status: "new",
+    });
+    setSaving(false);
+    if (error) toast.error("Couldn't save — opening WhatsApp instead.");
+    else toast.success("Message received. We'll be in touch shortly.");
     const msg = `Hi Hadees Trading,\n\nName: ${form.name}\nEmail: ${form.email}\nTopic: ${form.topic}\n\n${form.message}`;
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
   };
@@ -72,8 +87,8 @@ function ContactPage() {
               placeholder="Tell us a bit about your project..."
             />
           </div>
-          <button type="submit" className="mt-6 inline-flex items-center gap-2 rounded-full gradient-royal px-6 py-3 text-sm font-semibold text-white shadow-elegant hover:opacity-90 transition">
-            Send via WhatsApp <Send className="h-4 w-4" />
+          <button type="submit" disabled={saving} className="mt-6 inline-flex items-center gap-2 rounded-full gradient-royal px-6 py-3 text-sm font-semibold text-white shadow-elegant hover:opacity-90 disabled:opacity-60 transition">
+            {saving ? "Sending…" : "Send via WhatsApp"} <Send className="h-4 w-4" />
           </button>
         </form>
 
