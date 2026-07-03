@@ -15,15 +15,21 @@ import { Route as DigitalSolutionsRouteImport } from './routes/digital-solutions
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as BusinessServicesRouteImport } from './routes/business-services'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTunadiRouteImport } from './routes/api/tunadi'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedMyLearningRouteImport } from './routes/_authenticated/my-learning'
 import { Route as AuthenticatedLearnCourseIdRouteImport } from './routes/_authenticated/learn.$courseId'
+import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authenticated/admin.leads'
 import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
+import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin.clients'
+import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -55,6 +61,11 @@ const BusinessServicesRoute = BusinessServicesRouteImport.update({
   path: '/business-services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -79,9 +90,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTunadiRoute = ApiTunadiRouteImport.update({
+  id: '/api/tunadi',
+  path: '/api/tunadi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMyLearningRoute = AuthenticatedMyLearningRouteImport.update({
@@ -95,10 +116,27 @@ const AuthenticatedLearnCourseIdRoute =
     path: '/learn/$courseId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminLeadsRoute = AuthenticatedAdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminCoursesRoute =
   AuthenticatedAdminCoursesRouteImport.update({
     id: '/admin/courses',
     path: '/admin/courses',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminClientsRoute =
+  AuthenticatedAdminClientsRouteImport.update({
+    id: '/admin/clients',
+    path: '/admin/clients',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminBookingsRoute =
+  AuthenticatedAdminBookingsRouteImport.update({
+    id: '/admin/bookings',
+    path: '/admin/bookings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -107,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
@@ -114,8 +153,13 @@ export interface FileRoutesByFullPath {
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/my-learning': typeof AuthenticatedMyLearningRoute
+  '/orders': typeof AuthenticatedOrdersRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/api/tunadi': typeof ApiTunadiRoute
+  '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRoutesByTo {
@@ -123,6 +167,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
@@ -130,8 +175,13 @@ export interface FileRoutesByTo {
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/my-learning': typeof AuthenticatedMyLearningRoute
+  '/orders': typeof AuthenticatedOrdersRoute
   '/portal': typeof AuthenticatedPortalRoute
+  '/api/tunadi': typeof ApiTunadiRoute
+  '/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRoutesById {
@@ -141,6 +191,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/auth': typeof AuthRoute
+  '/book': typeof BookRoute
   '/business-services': typeof BusinessServicesRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
@@ -148,8 +199,13 @@ export interface FileRoutesById {
   '/knowledge-hub': typeof KnowledgeHubRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/my-learning': typeof AuthenticatedMyLearningRoute
+  '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/api/tunadi': typeof ApiTunadiRoute
+  '/_authenticated/admin/bookings': typeof AuthenticatedAdminBookingsRoute
+  '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
+  '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/_authenticated/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
 }
 export interface FileRouteTypes {
@@ -159,6 +215,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/auth'
+    | '/book'
     | '/business-services'
     | '/client-portal'
     | '/contact'
@@ -166,8 +223,13 @@ export interface FileRouteTypes {
     | '/knowledge-hub'
     | '/sitemap.xml'
     | '/my-learning'
+    | '/orders'
     | '/portal'
+    | '/api/tunadi'
+    | '/admin/bookings'
+    | '/admin/clients'
     | '/admin/courses'
+    | '/admin/leads'
     | '/learn/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -175,6 +237,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/auth'
+    | '/book'
     | '/business-services'
     | '/client-portal'
     | '/contact'
@@ -182,8 +245,13 @@ export interface FileRouteTypes {
     | '/knowledge-hub'
     | '/sitemap.xml'
     | '/my-learning'
+    | '/orders'
     | '/portal'
+    | '/api/tunadi'
+    | '/admin/bookings'
+    | '/admin/clients'
     | '/admin/courses'
+    | '/admin/leads'
     | '/learn/$courseId'
   id:
     | '__root__'
@@ -192,6 +260,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/auth'
+    | '/book'
     | '/business-services'
     | '/client-portal'
     | '/contact'
@@ -199,8 +268,13 @@ export interface FileRouteTypes {
     | '/knowledge-hub'
     | '/sitemap.xml'
     | '/_authenticated/my-learning'
+    | '/_authenticated/orders'
     | '/_authenticated/portal'
+    | '/api/tunadi'
+    | '/_authenticated/admin/bookings'
+    | '/_authenticated/admin/clients'
     | '/_authenticated/admin/courses'
+    | '/_authenticated/admin/leads'
     | '/_authenticated/learn/$courseId'
   fileRoutesById: FileRoutesById
 }
@@ -210,12 +284,14 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
   AuthRoute: typeof AuthRoute
+  BookRoute: typeof BookRoute
   BusinessServicesRoute: typeof BusinessServicesRoute
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
   DigitalSolutionsRoute: typeof DigitalSolutionsRoute
   KnowledgeHubRoute: typeof KnowledgeHubRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiTunadiRoute: typeof ApiTunadiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -262,6 +338,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -297,11 +380,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/tunadi': {
+      id: '/api/tunadi'
+      path: '/api/tunadi'
+      fullPath: '/api/tunadi'
+      preLoaderRoute: typeof ApiTunadiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/portal': {
       id: '/_authenticated/portal'
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orders': {
+      id: '/_authenticated/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/my-learning': {
@@ -318,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnCourseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/leads': {
+      id: '/_authenticated/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AuthenticatedAdminLeadsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/courses': {
       id: '/_authenticated/admin/courses'
       path: '/admin/courses'
@@ -325,20 +429,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCoursesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/clients': {
+      id: '/_authenticated/admin/clients'
+      path: '/admin/clients'
+      fullPath: '/admin/clients'
+      preLoaderRoute: typeof AuthenticatedAdminClientsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/bookings': {
+      id: '/_authenticated/admin/bookings'
+      path: '/admin/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedMyLearningRoute: typeof AuthenticatedMyLearningRoute
+  AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedAdminBookingsRoute: typeof AuthenticatedAdminBookingsRoute
+  AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRoute
   AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
+  AuthenticatedAdminLeadsRoute: typeof AuthenticatedAdminLeadsRoute
   AuthenticatedLearnCourseIdRoute: typeof AuthenticatedLearnCourseIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMyLearningRoute: AuthenticatedMyLearningRoute,
+  AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedAdminBookingsRoute: AuthenticatedAdminBookingsRoute,
+  AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRoute,
   AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
+  AuthenticatedAdminLeadsRoute: AuthenticatedAdminLeadsRoute,
   AuthenticatedLearnCourseIdRoute: AuthenticatedLearnCourseIdRoute,
 }
 
@@ -351,12 +477,14 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
   AuthRoute: AuthRoute,
+  BookRoute: BookRoute,
   BusinessServicesRoute: BusinessServicesRoute,
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
   DigitalSolutionsRoute: DigitalSolutionsRoute,
   KnowledgeHubRoute: KnowledgeHubRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiTunadiRoute: ApiTunadiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
