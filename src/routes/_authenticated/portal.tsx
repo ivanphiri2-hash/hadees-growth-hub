@@ -55,6 +55,8 @@ function PortalPage() {
 
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <PortalCard icon={BookOpen} title="My Learning" description="Continue Academy courses" to="/my-learning" />
+          <PortalCard icon={FileText} title="My Orders & Documents" description="Track engagements & files" to="/orders" />
+          <PortalCard icon={Calendar} title="Book a Consultation" description="Free 30-min discovery" to="/book" />
           <PortalCard icon={UserIcon} title="My Profile" description="Update contact details" to="/portal" />
           <PortalCard
             icon={MessageCircle}
@@ -62,15 +64,13 @@ function PortalPage() {
             description="Reach us on WhatsApp"
             href={waLink("Hi Hadees Trading, I'm signed into my portal and need help.")}
           />
-          <PortalCard icon={FileText} title="Orders" description="Coming in Phase 2" disabled />
-          <PortalCard icon={Calendar} title="Bookings" description="Coming in Phase 2" disabled />
           {isStaff && (
-            <PortalCard
-              icon={ShieldCheck}
-              title="Admin · Courses"
-              description="Manage Academy content"
-              to="/admin/courses"
-            />
+            <>
+              <PortalCard icon={ShieldCheck} title="Admin · Leads" description="CRM pipeline" to="/admin/leads" />
+              <PortalCard icon={ShieldCheck} title="Admin · Clients" description="Clients, orders, documents" to="/admin/clients" />
+              <PortalCard icon={ShieldCheck} title="Admin · Bookings" description="Manage consultations" to="/admin/bookings" />
+              <PortalCard icon={ShieldCheck} title="Admin · Courses" description="Manage Academy content" to="/admin/courses" />
+            </>
           )}
         </div>
 
