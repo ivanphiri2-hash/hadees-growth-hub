@@ -1,7 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { waLink } from "@/lib/company";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -16,6 +18,8 @@ const nav = [
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -23,6 +27,11 @@ export function SiteNav() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/", replace: true });
+  }
 
   return (
     <header
@@ -34,16 +43,10 @@ export function SiteNav() {
     >
       <div className="container-x flex h-16 items-center justify-between gap-6">
         <Link to="/" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl gradient-royal text-white font-bold shadow-elegant">
-            H
-          </span>
+          <span className="grid h-9 w-9 place-items-center rounded-xl gradient-royal text-white font-bold shadow-elegant">H</span>
           <span className="flex flex-col leading-none">
-            <span className="text-sm font-semibold tracking-tight text-foreground">
-              HADEES
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Trading
-            </span>
+            <span className="text-sm font-semibold tracking-tight text-foreground">HADEES</span>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Trading</span>
           </span>
         </Link>
 
@@ -62,6 +65,30 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {user ? (
+            <>
+              <Link
+                to="/portal"
+                className="hidden sm:inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted transition"
+              >
+                <UserIcon className="h-4 w-4" /> Portal
+              </Link>
+              <button
+                onClick={signOut}
+                aria-label="Sign out"
+                className="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-full border border-border hover:bg-muted"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted transition"
+            >
+              Sign in
+            </Link>
+          )}
           <a
             href={waLink("Hi Hadees Trading, I'd like to enquire about your services.")}
             target="_blank"
@@ -93,6 +120,20 @@ export function SiteNav() {
                 {n.label}
               </Link>
             ))}
+            {user ? (
+              <>
+                <Link to="/portal" onClick={() => setOpen(false)} className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted">
+                  My Portal
+                </Link>
+                <button onClick={() => { setOpen(false); signOut(); }} className="text-left rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted">
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link to="/auth" onClick={() => setOpen(false)} className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted">
+                Sign in
+              </Link>
+            )}
             <a
               href={waLink()}
               target="_blank"
