@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Hadees Trading — Business Solutions, Digital & Education (South Africa)" },
+      { title: "Hadees Trading — Building Businesses. Delivering Digital Solutions." },
       {
         name: "description",
         content:
@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "HADEES TRADING PTY LTD" },
       { property: "og:site_name", content: "Hadees Trading" },
-      { property: "og:title", content: "Hadees Trading — Business Solutions & Digital" },
+      { property: "og:title", content: "Hadees Trading — Building Businesses. Delivering Digital Solutions." },
       {
         property: "og:description",
         content:
@@ -95,6 +95,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Hadees Trading — Building Businesses. Delivering Digital Solutions." },
+      { name: "description", content: "HADEES TRADING PTY LTD helps South African entrepreneurs register, comply, brand, and modernise through business services, digital solutions, and professional education." },
+      { property: "og:description", content: "HADEES TRADING PTY LTD helps South African entrepreneurs register, comply, brand, and modernise through business services, digital solutions, and professional education." },
+      { name: "twitter:description", content: "HADEES TRADING PTY LTD helps South African entrepreneurs register, comply, brand, and modernise through business services, digital solutions, and professional education." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/75818d01-f7fc-4e3b-9cd9-e0024459fec3/id-preview-4a6016c3--bbb1e93a-c1ac-4e13-9062-7b77e988ff23.lovable.app-1783157736696.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/75818d01-f7fc-4e3b-9cd9-e0024459fec3/id-preview-4a6016c3--bbb1e93a-c1ac-4e13-9062-7b77e988ff23.lovable.app-1783157736696.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
