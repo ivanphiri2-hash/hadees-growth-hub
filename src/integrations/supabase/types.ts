@@ -280,6 +280,10 @@ export type Database = {
           description: string | null
           due_date: string | null
           id: string
+          paid_at: string | null
+          payfast_pf_payment_id: string | null
+          payment_provider: string | null
+          payment_reference: string | null
           status: string
           title: string
           updated_at: string
@@ -292,6 +296,10 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          paid_at?: string | null
+          payfast_pf_payment_id?: string | null
+          payment_provider?: string | null
+          payment_reference?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -304,6 +312,10 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          paid_at?: string | null
+          payfast_pf_payment_id?: string | null
+          payment_provider?: string | null
+          payment_reference?: string | null
           status?: string
           title?: string
           updated_at?: string
