@@ -1,27 +1,60 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FileText } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site-layout";
 import { PageHero } from "@/components/page-hero";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { waLink } from "@/lib/company";
+import { createPayfastPayment } from "@/lib/payfast.functions";
 
 type Order = { id: string; title: string; description: string | null; amount_cents: number; currency: string; status: string; due_date: string | null };
 type Doc = { id: string; name: string; storage_path: string; created_at: string };
 
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({ meta: [{ title: "My Orders — Hadees Trading" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (s: Record<string, unknown>) => ({ payment: (s.payment as string) ?? undefined }),
   component: MyOrdersPage,
 });
 
 function MyOrdersPage() {
   const { user } = useAuth();
+  const search = useSearch({ from: "/_authenticated/orders" });
+  const startPayfast = useServerFn(createPayfastPayment);
   const [orders, setOrders] = useState<Order[]>([]);
   const [docs, setDocs] = useState<Doc[]>([]);
   const [hasClient, setHasClient] = useState<boolean | null>(null);
+  const [paying, setPaying] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (search.payment === "success") toast.success("Payment received — updating your order shortly.");
+    if (search.payment === "cancelled") toast.info("Payment cancelled.");
+  }, [search.payment]);
+
+  async function pay(orderId: string) {
+    setPaying(orderId);
+    try {
+      const { action, fields } = await startPayfast({ data: { orderId } });
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = action;
+      for (const [k, v] of Object.entries(fields)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = k;
+        input.value = String(v);
+        form.appendChild(input);
+      }
+      document.body.appendChild(form);
+      form.submit();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not start payment");
+      setPaying(null);
+    }
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -68,7 +101,7 @@ function MyOrdersPage() {
                       <span className="font-mono text-sm">{o.currency} {(o.amount_cents / 100).toFixed(2)}</span>
                       <span className="text-xs rounded-full bg-muted px-2 py-0.5">{o.status}</span>
                       {o.status !== "paid" && (
-                        <Button size="sm" onClick={() => toast.info("Stripe checkout — configure Stripe from Portal to enable.")}>Pay</Button>
+                        <Button size="sm" disabled={paying === o.id} onClick={() => pay(o.id)}>{paying === o.id ? "Redirecting…" : "Pay with PayFast"}</Button>
                       )}
                     </div>
                   </div>
