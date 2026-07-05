@@ -30,6 +30,7 @@ import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin.clients'
 import { Route as AuthenticatedAdminBookingsRouteImport } from './routes/_authenticated/admin.bookings'
+import { Route as ApiPublicPayfastItnRouteImport } from './routes/api/public/payfast/itn'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -139,6 +140,11 @@ const AuthenticatedAdminBookingsRoute =
     path: '/admin/bookings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicPayfastItnRoute = ApiPublicPayfastItnRouteImport.update({
+  id: '/api/public/payfast/itn',
+  path: '/api/public/payfast/itn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
+  '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
+  '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
   '/_authenticated/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
+  '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/admin/courses'
     | '/admin/leads'
     | '/learn/$courseId'
+    | '/api/public/payfast/itn'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/admin/courses'
     | '/admin/leads'
     | '/learn/$courseId'
+    | '/api/public/payfast/itn'
   id:
     | '__root__'
     | '/'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/courses'
     | '/_authenticated/admin/leads'
     | '/_authenticated/learn/$courseId'
+    | '/api/public/payfast/itn'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   KnowledgeHubRoute: typeof KnowledgeHubRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiTunadiRoute: typeof ApiTunadiRoute
+  ApiPublicPayfastItnRoute: typeof ApiPublicPayfastItnRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBookingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/payfast/itn': {
+      id: '/api/public/payfast/itn'
+      path: '/api/public/payfast/itn'
+      fullPath: '/api/public/payfast/itn'
+      preLoaderRoute: typeof ApiPublicPayfastItnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   KnowledgeHubRoute: KnowledgeHubRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiTunadiRoute: ApiTunadiRoute,
+  ApiPublicPayfastItnRoute: ApiPublicPayfastItnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

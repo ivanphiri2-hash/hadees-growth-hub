@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { createHash } from "crypto";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -6,7 +7,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const schema = z.object({ orderId: z.string().uuid() });
 
 function pfEncode(v: string) {
-  // PayFast uses application/x-www-form-urlencoded with spaces as '+', uppercase hex.
   return encodeURIComponent(v).replace(/%20/g, "+").replace(/%[0-9a-f]{2}/g, (m) => m.toUpperCase());
 }
 
@@ -22,11 +22,10 @@ function pfSignature(fields: Record<string, string>, passphrase: string | undefi
 
 export const createPayfastPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => schema.parse(d))
+  .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
-    // Fetch the order + verify the caller owns the underlying client record.
     const { data: order, error: orderErr } = await supabase
       .from("orders")
       .select("id, title, amount_cents, currency, status, client_id, clients!inner(user_id)")
@@ -34,8 +33,9 @@ export const createPayfastPayment = createServerFn({ method: "POST" })
       .single();
 
     if (orderErr || !order) throw new Error("Order not found");
-    // @ts-expect-error joined shape
-    if (order.clients?.user_id !== userId) throw new Error("Forbidden");
+    const clientRel = (order as unknown as { clients: { user_id: string } | { user_id: string }[] }).clients;
+    const ownerId = Array.isArray(clientRel) ? clientRel[0]?.user_id : clientRel?.user_id;
+    if (ownerId !== userId) throw new Error("Forbidden");
     if (order.status === "paid") throw new Error("Order already paid");
     if (order.currency !== "ZAR") throw new Error("PayFast only supports ZAR");
 
@@ -45,21 +45,11 @@ export const createPayfastPayment = createServerFn({ method: "POST" })
     const sandbox = (process.env.PAYFAST_SANDBOX ?? "true").toLowerCase() !== "false";
     const host = sandbox ? "sandbox.payfast.co.za" : "www.payfast.co.za";
 
-    const origin = new URL(context.claims?.iss ?? "https://hadeestrading.co.za").origin;
-    // Prefer request origin so return URLs match the actual deployment.
-    const reqOrigin = (() => {
-      try {
-        const { getRequestHeader } = require("@tanstack/react-start/server") as typeof import("@tanstack/react-start/server");
-        const h = getRequestHeader("origin") || getRequestHeader("referer");
-        return h ? new URL(h).origin : origin;
-      } catch {
-        return origin;
-      }
-    })();
+    const originHeader = getRequestHeader("origin") || getRequestHeader("referer");
+    const reqOrigin = originHeader ? new URL(originHeader).origin : "https://hadeestrading.co.za";
 
     const paymentRef = `HTPL-${order.id.slice(0, 8)}-${Date.now()}`;
 
-    // Persist reference before redirecting so ITN can look it up.
     await supabase
       .from("orders")
       .update({ payment_reference: paymentRef, payment_provider: "payfast", status: "pending_payment" })
