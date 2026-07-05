@@ -101,7 +101,7 @@ function MyOrdersPage() {
                       <span className="font-mono text-sm">{o.currency} {(o.amount_cents / 100).toFixed(2)}</span>
                       <span className="text-xs rounded-full bg-muted px-2 py-0.5">{o.status}</span>
                       {o.status !== "paid" && (
-                        <Button size="sm" onClick={() => toast.info("Stripe checkout — configure Stripe from Portal to enable.")}>Pay</Button>
+                        <Button size="sm" disabled={paying === o.id} onClick={() => pay(o.id)}>{paying === o.id ? "Redirecting…" : "Pay with PayFast"}</Button>
                       )}
                     </div>
                   </div>
