@@ -68,7 +68,7 @@ export const Route = createFileRoute("/api/public/payfast/itn")({
 
         const { data: order } = await supabaseAdmin
           .from("orders")
-          .select("id, amount_cents, currency")
+          .select("id, client_id, title, description, amount_cents, currency, status")
           .eq("id", orderId)
           .maybeSingle();
 
@@ -80,6 +80,7 @@ export const Route = createFileRoute("/api/public/payfast/itn")({
         }
 
         if (status === "COMPLETE") {
+          const alreadyPaid = order.status === "paid";
           await supabaseAdmin
             .from("orders")
             .update({
@@ -90,6 +91,54 @@ export const Route = createFileRoute("/api/public/payfast/itn")({
               payment_provider: "payfast",
             })
             .eq("id", orderId);
+
+          if (!alreadyPaid) {
+            try {
+              const { renderInvoicePdf } = await import("@/lib/invoice.server");
+              const { data: client } = await supabaseAdmin
+                .from("clients")
+                .select("id, company, user_id")
+                .eq("id", order.client_id)
+                .maybeSingle();
+              let full_name: string | null = null;
+              let email: string | null = fields.email_address ?? null;
+              if (client?.user_id) {
+                const { data: prof } = await supabaseAdmin
+                  .from("profiles").select("full_name").eq("id", client.user_id).maybeSingle();
+                full_name = prof?.full_name ?? null;
+                const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(client.user_id);
+                email = authUser?.user?.email ?? email;
+              }
+              const invoiceNumber = `INV-${new Date().getFullYear()}-${(paymentRef ?? order.id).slice(-8).toUpperCase()}`;
+              const pdf = await renderInvoicePdf({
+                invoiceNumber,
+                issuedAt: new Date(),
+                order,
+                client: { company: client?.company ?? null, full_name, email },
+                payment: { reference: paymentRef, provider: "payfast", pfPaymentId: fields.pf_payment_id ?? null },
+              });
+              const path = `${order.client_id}/invoices/${invoiceNumber}.pdf`;
+              const { error: upErr } = await supabaseAdmin.storage.from("documents").upload(
+                path,
+                new Blob([pdf as BlobPart], { type: "application/pdf" }),
+                { contentType: "application/pdf", upsert: true },
+              );
+              if (!upErr) {
+                await supabaseAdmin.from("documents").insert({
+                  client_id: order.client_id,
+                  order_id: order.id,
+                  name: `${invoiceNumber}.pdf`,
+                  storage_path: path,
+                  mime: "application/pdf",
+                  size_bytes: pdf.byteLength,
+                });
+              } else {
+                console.error("[payfast-itn] invoice upload failed", upErr);
+              }
+            } catch (e) {
+              console.error("[payfast-itn] invoice generation failed", e);
+            }
+          }
         } else {
           await supabaseAdmin
             .from("orders")
