@@ -22,9 +22,39 @@ export const Route = createFileRoute("/_authenticated/orders")({
 
 function MyOrdersPage() {
   const { user } = useAuth();
+  const search = useSearch({ from: "/_authenticated/orders" });
+  const startPayfast = useServerFn(createPayfastPayment);
   const [orders, setOrders] = useState<Order[]>([]);
   const [docs, setDocs] = useState<Doc[]>([]);
   const [hasClient, setHasClient] = useState<boolean | null>(null);
+  const [paying, setPaying] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (search.payment === "success") toast.success("Payment received — updating your order shortly.");
+    if (search.payment === "cancelled") toast.info("Payment cancelled.");
+  }, [search.payment]);
+
+  async function pay(orderId: string) {
+    setPaying(orderId);
+    try {
+      const { action, fields } = await startPayfast({ data: { orderId } });
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = action;
+      for (const [k, v] of Object.entries(fields)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = k;
+        input.value = String(v);
+        form.appendChild(input);
+      }
+      document.body.appendChild(form);
+      form.submit();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not start payment");
+      setPaying(null);
+    }
+  }
 
   useEffect(() => {
     if (!user) return;
