@@ -16,6 +16,7 @@ type Doc = { id: string; name: string; storage_path: string; created_at: string 
 
 export const Route = createFileRoute("/_authenticated/orders")({
   head: () => ({ meta: [{ title: "My Orders — Hadees Trading" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (s: Record<string, unknown>) => ({ payment: (s.payment as string) ?? undefined }),
   component: MyOrdersPage,
 });
 
