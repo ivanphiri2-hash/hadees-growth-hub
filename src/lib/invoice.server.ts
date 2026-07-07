@@ -44,7 +44,9 @@ export async function renderInvoicePdf(input: InvoiceInput): Promise<Uint8Array>
 
   page.drawText(BRAND, { x: margin, y, size: 18, font: bold, color: navy });
   y -= 18;
-  BRAND_LINES.forEach((l) => { page.drawText(l, { x: margin, y, size: 9, font, color: gray }); y -= 12; });
+  const contactEmail = input.contactEmail?.trim() || (await getContactEmail());
+  const brandLines: string[] = [contactEmail, BRAND_SITE];
+  brandLines.forEach((l) => { page.drawText(l, { x: margin, y, size: 9, font, color: gray }); y -= 12; });
 
   y = 800;
   page.drawText("TAX INVOICE", { x: 400, y, size: 18, font: bold, color: navy });
