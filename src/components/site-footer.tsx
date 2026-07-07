@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { COMPANY_NAME, WHATSAPP_NUMBER, waLink } from "@/lib/company";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export function SiteFooter() {
   return (
