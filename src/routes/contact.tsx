@@ -6,6 +6,7 @@ import { SiteLayout } from "@/components/site-layout";
 import { PageHero } from "@/components/page-hero";
 import { WHATSAPP_NUMBER, waLink } from "@/lib/company";
 import { supabase } from "@/integrations/supabase/client";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
