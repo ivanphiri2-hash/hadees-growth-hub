@@ -5,6 +5,7 @@ import { useContactEmail } from "@/hooks/use-app-settings";
 
 export function SiteFooter() {
   const contactEmail = useContactEmail();
+  return (
     <footer className="mt-24 border-t border-border bg-[color:var(--navy-deep)] text-slate-300">
       <div className="container-x py-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
         <div>
