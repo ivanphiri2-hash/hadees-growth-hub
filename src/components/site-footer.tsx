@@ -50,7 +50,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-start gap-2">
               <Mail className="h-4 w-4 mt-0.5 text-[color:var(--gold)]" />
-              <span>hello@hadeestrading.co.za</span>
+              <span>info@hadeestrading.co.za</span>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="h-4 w-4 mt-0.5 text-[color:var(--gold)]" />
