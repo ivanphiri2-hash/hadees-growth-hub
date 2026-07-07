@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { COMPANY_NAME, WHATSAPP_NUMBER, waLink } from "@/lib/company";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export function SiteFooter() {
+  const contactEmail = useContactEmail();
   return (
     <footer className="mt-24 border-t border-border bg-[color:var(--navy-deep)] text-slate-300">
       <div className="container-x py-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
@@ -50,7 +52,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-start gap-2">
               <Mail className="h-4 w-4 mt-0.5 text-[color:var(--gold)]" />
-              <span>info@hadeestrading.co.za</span>
+              <a href={`mailto:${contactEmail}`} className="hover:text-white">{contactEmail}</a>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="h-4 w-4 mt-0.5 text-[color:var(--gold)]" />

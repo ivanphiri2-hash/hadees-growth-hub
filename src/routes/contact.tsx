@@ -6,6 +6,7 @@ import { SiteLayout } from "@/components/site-layout";
 import { PageHero } from "@/components/page-hero";
 import { WHATSAPP_NUMBER, waLink } from "@/lib/company";
 import { supabase } from "@/integrations/supabase/client";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
   const [saving, setSaving] = useState(false);
+  const contactEmail = useContactEmail();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +107,7 @@ function ContactPage() {
           <div className="card-elevated p-6">
             <Mail className="h-5 w-5 text-[color:var(--royal)]" />
             <h4 className="mt-3 font-semibold">Email</h4>
-            <p className="mt-1 text-sm text-muted-foreground">info@hadeestrading.co.za</p>
+            <a href={`mailto:${contactEmail}`} className="mt-1 block text-sm text-muted-foreground hover:text-foreground">{contactEmail}</a>
           </div>
 
           <div className="card-elevated p-6">

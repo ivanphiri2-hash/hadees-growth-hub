@@ -7,13 +7,28 @@ export type InvoiceInput = {
   order: { id: string; title: string; description: string | null; amount_cents: number; currency: string };
   client: { company: string | null; full_name: string | null; email: string | null };
   payment: { reference: string | null; provider: string | null; pfPaymentId: string | null };
+  /** Optional override for the public contact email displayed on the invoice. */
+  contactEmail?: string;
 };
 
 const BRAND = "Hadees Trading (Pty) Ltd";
-const BRAND_LINES = [
-  "admin@hadeestrading.co.za",
-  "https://hadeestrading.co.za",
-];
+const DEFAULT_CONTACT_EMAIL = "info@hadeestrading.co.za";
+const BRAND_SITE = "https://hadeestrading.co.za";
+
+/** Fetches the configured public contact email from app_settings (server-only). */
+export async function getContactEmail(): Promise<string> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("app_settings")
+      .select("value")
+      .eq("key", "contact_email")
+      .maybeSingle();
+    return data?.value?.trim() || DEFAULT_CONTACT_EMAIL;
+  } catch {
+    return DEFAULT_CONTACT_EMAIL;
+  }
+}
 
 export async function renderInvoicePdf(input: InvoiceInput): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
@@ -29,7 +44,9 @@ export async function renderInvoicePdf(input: InvoiceInput): Promise<Uint8Array>
 
   page.drawText(BRAND, { x: margin, y, size: 18, font: bold, color: navy });
   y -= 18;
-  BRAND_LINES.forEach((l) => { page.drawText(l, { x: margin, y, size: 9, font, color: gray }); y -= 12; });
+  const contactEmail = input.contactEmail?.trim() || (await getContactEmail());
+  const brandLines: string[] = [contactEmail, BRAND_SITE];
+  brandLines.forEach((l) => { page.drawText(l, { x: margin, y, size: 9, font, color: gray }); y -= 12; });
 
   y = 800;
   page.drawText("TAX INVOICE", { x: 400, y, size: 18, font: bold, color: navy });
