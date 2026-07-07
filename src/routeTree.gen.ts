@@ -26,6 +26,7 @@ import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedMyLearningRouteImport } from './routes/_authenticated/my-learning'
 import { Route as AuthenticatedLearnCourseIdRouteImport } from './routes/_authenticated/learn.$courseId'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminLeadsRouteImport } from './routes/_authenticated/admin.leads'
 import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin.courses'
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin.clients'
@@ -117,6 +118,12 @@ const AuthenticatedLearnCourseIdRoute =
     path: '/learn/$courseId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/admin/settings',
+    path: '/admin/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminLeadsRoute = AuthenticatedAdminLeadsRouteImport.update({
   id: '/admin/leads',
   path: '/admin/leads',
@@ -166,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
   '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
@@ -189,6 +197,7 @@ export interface FileRoutesByTo {
   '/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
   '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
@@ -214,6 +223,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRoute
   '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/_authenticated/admin/leads': typeof AuthenticatedAdminLeadsRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/learn/$courseId': typeof AuthenticatedLearnCourseIdRoute
   '/api/public/payfast/itn': typeof ApiPublicPayfastItnRoute
 }
@@ -239,6 +249,7 @@ export interface FileRouteTypes {
     | '/admin/clients'
     | '/admin/courses'
     | '/admin/leads'
+    | '/admin/settings'
     | '/learn/$courseId'
     | '/api/public/payfast/itn'
   fileRoutesByTo: FileRoutesByTo
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/admin/clients'
     | '/admin/courses'
     | '/admin/leads'
+    | '/admin/settings'
     | '/learn/$courseId'
     | '/api/public/payfast/itn'
   id:
@@ -286,6 +298,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/clients'
     | '/_authenticated/admin/courses'
     | '/_authenticated/admin/leads'
+    | '/_authenticated/admin/settings'
     | '/_authenticated/learn/$courseId'
     | '/api/public/payfast/itn'
   fileRoutesById: FileRoutesById
@@ -428,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnCourseIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/leads': {
       id: '/_authenticated/admin/leads'
       path: '/admin/leads'
@@ -474,6 +494,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRoute
   AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
   AuthenticatedAdminLeadsRoute: typeof AuthenticatedAdminLeadsRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedLearnCourseIdRoute: typeof AuthenticatedLearnCourseIdRoute
 }
 
@@ -485,6 +506,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRoute,
   AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
   AuthenticatedAdminLeadsRoute: AuthenticatedAdminLeadsRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedLearnCourseIdRoute: AuthenticatedLearnCourseIdRoute,
 }
 
