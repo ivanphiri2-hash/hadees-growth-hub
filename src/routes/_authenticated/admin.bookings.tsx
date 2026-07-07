@@ -36,6 +36,29 @@ function AdminBookingsPage() {
       if (error) return toast.error(error.message);
       setRows(data as Booking[]);
     });
+    const channel = supabase
+      .channel("admin-bookings")
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, (payload) => {
+        setRows((prev) => {
+          if (payload.eventType === "INSERT") {
+            const row = payload.new as Booking;
+            if (prev.some((r) => r.id === row.id)) return prev;
+            toast.success(`New booking: ${row.name}`);
+            return [...prev, row].sort((a, b) => a.requested_at.localeCompare(b.requested_at));
+          }
+          if (payload.eventType === "UPDATE") {
+            const row = payload.new as Booking;
+            return prev.map((r) => (r.id === row.id ? row : r));
+          }
+          if (payload.eventType === "DELETE") {
+            const row = payload.old as Booking;
+            return prev.filter((r) => r.id !== row.id);
+          }
+          return prev;
+        });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [isStaff]);
 
   async function setStatus(id: string, status: string) {
