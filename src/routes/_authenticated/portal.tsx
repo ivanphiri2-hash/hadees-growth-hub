@@ -70,6 +70,7 @@ function PortalPage() {
               <PortalCard icon={ShieldCheck} title="Admin · Clients" description="Clients, orders, documents" to="/admin/clients" />
               <PortalCard icon={ShieldCheck} title="Admin · Bookings" description="Manage consultations" to="/admin/bookings" />
               <PortalCard icon={ShieldCheck} title="Admin · Courses" description="Manage Academy content" to="/admin/courses" />
+              <PortalCard icon={ShieldCheck} title="Admin · Settings" description="Contact email & site settings" to="/admin/settings" />
             </>
           )}
         </div>
