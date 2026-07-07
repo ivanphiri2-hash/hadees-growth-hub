@@ -43,7 +43,17 @@ function AdminClientsPage() {
     const { data: ps } = await supabase.from("profiles").select("id, full_name");
     setProfiles(Object.fromEntries((ps ?? []).map((p) => [p.id, p as ProfileLite])));
   }
-  useEffect(() => { if (isStaff) loadAll(); }, [isStaff]);
+  useEffect(() => {
+    if (!isStaff) return;
+    loadAll();
+    const channel = supabase
+      .channel("admin-clients")
+      .on("postgres_changes", { event: "*", schema: "public", table: "clients" }, () => {
+        loadAll();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [isStaff]);
 
   useEffect(() => {
     if (!selected) { setOrders([]); setDocs([]); return; }
