@@ -52,6 +52,29 @@ function AdminLeadsPage() {
       if (error) return toast.error(error.message);
       setLeads(data as Lead[]);
     });
+    const channel = supabase
+      .channel("admin-leads")
+      .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, (payload) => {
+        setLeads((prev) => {
+          if (payload.eventType === "INSERT") {
+            const row = payload.new as Lead;
+            if (prev.some((l) => l.id === row.id)) return prev;
+            toast.success(`New lead: ${row.name}`);
+            return [row, ...prev];
+          }
+          if (payload.eventType === "UPDATE") {
+            const row = payload.new as Lead;
+            return prev.map((l) => (l.id === row.id ? row : l));
+          }
+          if (payload.eventType === "DELETE") {
+            const row = payload.old as Lead;
+            return prev.filter((l) => l.id !== row.id);
+          }
+          return prev;
+        });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [isStaff]);
 
   const sources = useMemo(() => Array.from(new Set(leads.map((l) => l.source).filter(Boolean))) as string[], [leads]);
