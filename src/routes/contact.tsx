@@ -105,7 +105,7 @@ function ContactPage() {
           <div className="card-elevated p-6">
             <Mail className="h-5 w-5 text-[color:var(--royal)]" />
             <h4 className="mt-3 font-semibold">Email</h4>
-            <p className="mt-1 text-sm text-muted-foreground">hello@hadeestrading.co.za</p>
+            <p className="mt-1 text-sm text-muted-foreground">info@hadeestrading.co.za</p>
           </div>
 
           <div className="card-elevated p-6">
