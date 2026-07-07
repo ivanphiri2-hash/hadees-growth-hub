@@ -24,6 +24,7 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
   const [saving, setSaving] = useState(false);
+  const contactEmail = useContactEmail();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
