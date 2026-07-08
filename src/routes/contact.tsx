@@ -122,8 +122,10 @@ function ContactPage() {
 
           <div className="card-elevated p-6">
             <MapPin className="h-5 w-5 text-[color:var(--royal)]" />
-            <h4 className="mt-3 font-semibold">Based in</h4>
-            <p className="mt-1 text-sm text-muted-foreground">South Africa — serving clients nationwide.</p>
+            <h4 className="mt-3 font-semibold">Visit us</h4>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Stand 30065<br />Mahikeng, 2735<br />South Africa
+            </p>
           </div>
         </div>
       </section>

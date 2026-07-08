@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, Mail } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { waLink } from "@/lib/company";
 import { PageHero } from "@/components/page-hero";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/business-services")({
   head: () => ({
@@ -53,21 +54,23 @@ const packages = [
 ];
 
 const additional = [
-  { name: "COIDA Registration", price: "From R750" },
-  { name: "NHBRC Registration", price: "From R1500" },
-  { name: "CIDB Application", price: "From R1200" },
-  { name: "Tax Clearance", price: "From R450" },
+  { name: "COIDA Registration", price: "R3,500" },
+  { name: "NHBRC Registration", price: "R4,500" },
+  { name: "NHBRC Assistance", price: "R500" },
+  { name: "CIDB Application", price: "From R1,200" },
+  { name: "Tax Clearance Assistance", price: "R350" },
+  { name: "B-BBEE Registration", price: "R350" },
   { name: "Annual Returns", price: "From R350" },
-  { name: "Business Plans", price: "From R1500" },
+  { name: "Business Plan", price: "R500" },
   { name: "Company Profiles", price: "From R750" },
-  { name: "Tender Documentation", price: "From R950" },
-  { name: "Share Certificates", price: "From R250" },
-  { name: "Logo Design", price: "From R450" },
-  { name: "Invoice Templates", price: "From R250" },
-  { name: "Letterheads", price: "From R250" },
+  { name: "Tender Document Review", price: "R500" },
+  { name: "Share Certificate", price: "R350" },
+  { name: "Letterhead & Logo Design", price: "R500" },
+  { name: "Invoice & Quotation Template", price: "R400" },
 ];
 
 function BusinessServicesPage() {
+  const contactEmail = useContactEmail();
   return (
     <SiteLayout>
       <PageHero
@@ -131,24 +134,32 @@ function BusinessServicesPage() {
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--royal)]">Additional Services</p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight">Everything else your business needs</h2>
-          <p className="mt-3 text-muted-foreground">Individual services available on request. Enquire on WhatsApp for a personalised quote.</p>
+          <p className="mt-3 text-muted-foreground font-medium">Individual services are available on request. Enquire via WhatsApp or Email for a personalised quotation.</p>
         </div>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {additional.map((s) => (
-            <div key={s.name} className="card-elevated card-elevated-hover p-5 flex items-center justify-between gap-4">
+            <div key={s.name} className="card-elevated card-elevated-hover p-5 flex flex-col gap-3">
               <div>
                 <h4 className="font-semibold text-foreground">{s.name}</h4>
                 <p className="text-xs text-muted-foreground mt-1">{s.price}</p>
               </div>
-              <a
-                href={waLink(`Hi Hadees Trading, I'd like to enquire about ${s.name}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--navy)] px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90 transition"
-              >
-                Enquire <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={waLink(`Hi Hadees Trading, I'd like to enquire about ${s.name}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--navy)] px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90 transition"
+                >
+                  WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                </a>
+                <a
+                  href={`mailto:${contactEmail}?subject=${encodeURIComponent(`Enquiry: ${s.name}`)}`}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-muted transition"
+                >
+                  <Mail className="h-3.5 w-3.5" /> Email
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -159,14 +170,22 @@ function BusinessServicesPage() {
           <Sparkles className="h-6 w-6 mx-auto text-[color:var(--gold)]" />
           <h3 className="mt-4 text-2xl font-bold">Not sure which package fits?</h3>
           <p className="mt-2 text-white/85">Send us a message — we'll recommend the right path for your business.</p>
-          <a
-            href={waLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[color:var(--navy)] hover:bg-white/90 transition"
-          >
-            Chat with us <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={waLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[color:var(--navy)] hover:bg-white/90 transition"
+            >
+              Chat on WhatsApp <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href={`mailto:${contactEmail}?subject=${encodeURIComponent("Business services enquiry")}`}
+              className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 backdrop-blur px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition"
+            >
+              <Mail className="h-4 w-4" /> Email us
+            </a>
+          </div>
         </div>
       </section>
     </SiteLayout>
