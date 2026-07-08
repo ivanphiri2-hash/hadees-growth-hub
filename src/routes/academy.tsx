@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Brain, LineChart, Layers, Waves, CheckCircle2, ArrowRight, ChevronDown, AlertTriangle } from "lucide-react";
+import { Brain, LineChart, Layers, Waves, CheckCircle2, ArrowRight, ChevronDown, AlertTriangle, Mail } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { waLink } from "@/lib/company";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/academy")({
   head: () => ({
@@ -54,6 +55,7 @@ const faqs = [
 ];
 
 function AcademyPage() {
+  const contactEmail = useContactEmail();
   return (
     <SiteLayout>
       {/* Dark hero */}
@@ -134,12 +136,20 @@ function AcademyPage() {
                   </li>
                 ))}
               </ul>
-              <a href={waLink(`Hi Hadees Trading, I'd like the ${t.name} Academy tier.`)} target="_blank" rel="noopener noreferrer"
-                 className={`mt-8 flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
-                   t.highlighted ? "bg-white text-[color:var(--navy-deep)] hover:bg-white/90" : "gradient-royal text-white hover:opacity-90"
-                 }`}>
-                Enrol via WhatsApp <ArrowRight className="h-4 w-4" />
-              </a>
+              <div className="mt-8 flex flex-col gap-2">
+                <a href={waLink(`Hi Hadees Trading, I'd like the ${t.name} Academy tier.`)} target="_blank" rel="noopener noreferrer"
+                   className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
+                     t.highlighted ? "bg-white text-[color:var(--navy-deep)] hover:bg-white/90" : "gradient-royal text-white hover:opacity-90"
+                   }`}>
+                  Enrol via WhatsApp <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href={`mailto:${contactEmail}?subject=${encodeURIComponent(`Academy enrolment: ${t.name}`)}`}
+                   className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
+                     t.highlighted ? "border border-white/40 bg-white/10 text-white hover:bg-white/20" : "border border-border bg-background text-foreground hover:bg-muted"
+                   }`}>
+                  <Mail className="h-4 w-4" /> Email us
+                </a>
+              </div>
             </div>
           ))}
         </div>
