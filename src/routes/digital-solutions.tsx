@@ -3,6 +3,7 @@ import { CheckCircle2, ArrowRight, Globe, Mail, Server, Search, Palette, Databas
 import { SiteLayout } from "@/components/site-layout";
 import { PageHero } from "@/components/page-hero";
 import { waLink } from "@/lib/company";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/digital-solutions")({
   head: () => ({
@@ -50,6 +51,7 @@ const services = [
 ];
 
 function DigitalPage() {
+  const contactEmail = useContactEmail();
   return (
     <SiteLayout>
       <PageHero
@@ -87,18 +89,30 @@ function DigitalPage() {
                   </li>
                 ))}
               </ul>
-              <a
-                href={waLink(`Hi Hadees Trading, I'd like the ${p.name} package.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`mt-8 flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
-                  p.highlighted
-                    ? "bg-white text-[color:var(--navy-deep)] hover:bg-white/90"
-                    : "gradient-royal text-white hover:opacity-90"
-                }`}
-              >
-                Get started <ArrowRight className="h-4 w-4" />
-              </a>
+              <div className="mt-8 flex flex-col gap-2">
+                <a
+                  href={waLink(`Hi Hadees Trading, I'd like the ${p.name} package.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
+                    p.highlighted
+                      ? "bg-white text-[color:var(--navy-deep)] hover:bg-white/90"
+                      : "gradient-royal text-white hover:opacity-90"
+                  }`}
+                >
+                  Chat on WhatsApp <ArrowRight className="h-4 w-4" />
+                </a>
+                <a
+                  href={`mailto:${contactEmail}?subject=${encodeURIComponent(`${p.name} enquiry`)}`}
+                  className={`flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition ${
+                    p.highlighted
+                      ? "border border-white/40 bg-white/10 text-white hover:bg-white/20"
+                      : "border border-border bg-background text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Mail className="h-4 w-4" /> Email us
+                </a>
+              </div>
             </div>
           ))}
         </div>
