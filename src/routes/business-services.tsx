@@ -134,7 +134,7 @@ function BusinessServicesPage() {
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--royal)]">Additional Services</p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight">Everything else your business needs</h2>
-          <p className="mt-3 text-muted-foreground">Individual services available on request. Enquire on WhatsApp for a personalised quote.</p>
+          <p className="mt-3 text-muted-foreground font-medium">Individual services are available on request. Enquire via WhatsApp or Email for a personalised quotation.</p>
         </div>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -162,14 +162,22 @@ function BusinessServicesPage() {
           <Sparkles className="h-6 w-6 mx-auto text-[color:var(--gold)]" />
           <h3 className="mt-4 text-2xl font-bold">Not sure which package fits?</h3>
           <p className="mt-2 text-white/85">Send us a message — we'll recommend the right path for your business.</p>
-          <a
-            href={waLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[color:var(--navy)] hover:bg-white/90 transition"
-          >
-            Chat with us <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={waLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[color:var(--navy)] hover:bg-white/90 transition"
+            >
+              Chat on WhatsApp <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href={`mailto:${contactEmail}?subject=${encodeURIComponent("Business services enquiry")}`}
+              className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 backdrop-blur px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition"
+            >
+              <Mail className="h-4 w-4" /> Email us
+            </a>
+          </div>
         </div>
       </section>
     </SiteLayout>
