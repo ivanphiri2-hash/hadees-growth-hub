@@ -160,14 +160,22 @@ function DigitalPage() {
               </div>
               <h4 className="mt-4 font-semibold text-foreground">{s.name}</h4>
               <p className="mt-1 text-sm text-muted-foreground">{s.desc}</p>
-              <a
-                href={waLink(`Hi Hadees Trading, I'd like a quote for ${s.name}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--royal)] hover:text-[color:var(--navy)]"
-              >
-                Enquire on WhatsApp <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+              <div className="mt-4 flex flex-wrap gap-3 text-xs font-semibold">
+                <a
+                  href={waLink(`Hi Hadees Trading, I'd like a quote for ${s.name}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[color:var(--royal)] hover:text-[color:var(--navy)]"
+                >
+                  WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                </a>
+                <a
+                  href={`mailto:${contactEmail}?subject=${encodeURIComponent(`Quote request: ${s.name}`)}`}
+                  className="inline-flex items-center gap-1.5 text-[color:var(--royal)] hover:text-[color:var(--navy)]"
+                >
+                  <Mail className="h-3.5 w-3.5" /> Email
+                </a>
+              </div>
             </div>
           ))}
         </div>
