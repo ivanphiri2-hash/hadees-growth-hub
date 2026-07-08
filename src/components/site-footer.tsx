@@ -56,7 +56,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="h-4 w-4 mt-0.5 text-[color:var(--gold)]" />
-              <span>South Africa</span>
+              <span>Stand 30065<br />Mahikeng, 2735<br />South Africa</span>
             </li>
           </ul>
         </div>
