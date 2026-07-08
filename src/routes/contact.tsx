@@ -131,10 +131,28 @@ function ContactPage() {
       </section>
 
       <section className="container-x mt-16 mb-4">
-        <div className="rounded-3xl overflow-hidden border border-border bg-[color:var(--surface-2)] aspect-[16/6] grid place-items-center text-muted-foreground text-sm">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" /> Google Maps placeholder
+        <div className="rounded-3xl overflow-hidden border border-border bg-[color:var(--surface-2)]">
+          <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-border bg-background/60">
+            <div className="flex items-center gap-2 text-sm">
+              <MapPin className="h-4 w-4 text-[color:var(--royal)]" />
+              <span className="font-semibold">Stand 30065, Mahikeng, 2735, South Africa</span>
+            </div>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Stand+30065+Mahikeng+2735+South+Africa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-[color:var(--royal)] hover:text-[color:var(--navy)]"
+            >
+              Open in Google Maps
+            </a>
           </div>
+          <iframe
+            title="Hadees Trading — Mahikeng location"
+            src="https://www.google.com/maps?q=Mahikeng%2C%202735%2C%20South%20Africa&output=embed"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full aspect-[16/6] border-0"
+          />
         </div>
       </section>
     </SiteLayout>
