@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { CheckCircle2, ArrowRight, Sparkles, Mail } from "lucide-react";
 import { SiteLayout } from "@/components/site-layout";
 import { waLink } from "@/lib/company";
 import { PageHero } from "@/components/page-hero";
+import { useContactEmail } from "@/hooks/use-app-settings";
 
 export const Route = createFileRoute("/business-services")({
   head: () => ({
@@ -53,21 +54,23 @@ const packages = [
 ];
 
 const additional = [
-  { name: "COIDA Registration", price: "From R750" },
-  { name: "NHBRC Registration", price: "From R1500" },
-  { name: "CIDB Application", price: "From R1200" },
-  { name: "Tax Clearance", price: "From R450" },
+  { name: "COIDA Registration", price: "R3,500" },
+  { name: "NHBRC Registration", price: "R4,500" },
+  { name: "NHBRC Assistance", price: "R500" },
+  { name: "CIDB Application", price: "From R1,200" },
+  { name: "Tax Clearance Assistance", price: "R350" },
+  { name: "B-BBEE Registration", price: "R350" },
   { name: "Annual Returns", price: "From R350" },
-  { name: "Business Plans", price: "From R1500" },
+  { name: "Business Plan", price: "R500" },
   { name: "Company Profiles", price: "From R750" },
-  { name: "Tender Documentation", price: "From R950" },
-  { name: "Share Certificates", price: "From R250" },
-  { name: "Logo Design", price: "From R450" },
-  { name: "Invoice Templates", price: "From R250" },
-  { name: "Letterheads", price: "From R250" },
+  { name: "Tender Document Review", price: "R500" },
+  { name: "Share Certificate", price: "R350" },
+  { name: "Letterhead & Logo Design", price: "R500" },
+  { name: "Invoice & Quotation Template", price: "R400" },
 ];
 
 function BusinessServicesPage() {
+  const contactEmail = useContactEmail();
   return (
     <SiteLayout>
       <PageHero
