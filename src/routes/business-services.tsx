@@ -139,19 +139,27 @@ function BusinessServicesPage() {
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {additional.map((s) => (
-            <div key={s.name} className="card-elevated card-elevated-hover p-5 flex items-center justify-between gap-4">
+            <div key={s.name} className="card-elevated card-elevated-hover p-5 flex flex-col gap-3">
               <div>
                 <h4 className="font-semibold text-foreground">{s.name}</h4>
                 <p className="text-xs text-muted-foreground mt-1">{s.price}</p>
               </div>
-              <a
-                href={waLink(`Hi Hadees Trading, I'd like to enquire about ${s.name}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--navy)] px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90 transition"
-              >
-                Enquire <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={waLink(`Hi Hadees Trading, I'd like to enquire about ${s.name}.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--navy)] px-3.5 py-2 text-xs font-semibold text-white hover:opacity-90 transition"
+                >
+                  WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+                </a>
+                <a
+                  href={`mailto:${contactEmail}?subject=${encodeURIComponent(`Enquiry: ${s.name}`)}`}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-muted transition"
+                >
+                  <Mail className="h-3.5 w-3.5" /> Email
+                </a>
+              </div>
             </div>
           ))}
         </div>
