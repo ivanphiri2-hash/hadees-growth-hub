@@ -1,0 +1,99 @@
+-- Migration: Enable full superadmin and admin staff access to all portal data
+-- This ensures superadmin (admin@hadeestrading.co.za) and admins can see all leads and manage them
+
+BEGIN;
+
+-- Step 1: Ensure the has_role function treats super_admin as having any role
+CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role public.app_role)
+RETURNS boolean
+LANGUAGE sql
+STABLE SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.user_roles
+    WHERE user_id = _user_id
+      AND (role = _role OR role = 'super_admin')
+  );
+$$;
+
+-- Step 2: Update leads RLS policies for full superadmin/admin access
+DROP POLICY IF EXISTS "Staff can view leads" ON public.leads;
+CREATE POLICY "Staff and admins can view leads" ON public.leads 
+  FOR SELECT TO authenticated 
+  USING (
+    public.has_role(auth.uid(), 'admin') 
+    OR public.has_role(auth.uid(), 'staff')
+    OR public.is_super_admin(auth.uid())
+  );
+
+DROP POLICY IF EXISTS "Staff can update leads" ON public.leads;
+CREATE POLICY "Staff and admins can update leads" ON public.leads 
+  FOR UPDATE TO authenticated 
+  USING (
+    public.has_role(auth.uid(), 'admin')
+    OR public.has_role(auth.uid(), 'staff')
+    OR public.is_super_admin(auth.uid())
+  );
+
+DROP POLICY IF EXISTS "Admins can delete leads" ON public.leads;
+CREATE POLICY "Admins and superadmins can delete leads" ON public.leads 
+  FOR DELETE TO authenticated 
+  USING (
+    public.has_role(auth.uid(), 'admin')
+    OR public.is_super_admin(auth.uid())
+  );
+
+-- Step 3: Add explicit full-access policy for superadmin on leads (catch-all)
+DROP POLICY IF EXISTS "super_admin_leads_full_access" ON public.leads;
+CREATE POLICY "super_admin_leads_full_access" ON public.leads
+  FOR ALL TO authenticated
+  USING (public.is_super_admin(auth.uid()))
+  WITH CHECK (public.is_super_admin(auth.uid()));
+
+-- Step 4: Ensure superadmin role exists for owner
+DO $$
+DECLARE owner_id uuid;
+BEGIN
+  SELECT id INTO owner_id FROM auth.users WHERE lower(email) = 'admin@hadeestrading.co.za' LIMIT 1;
+  IF owner_id IS NOT NULL THEN
+    -- Insert superadmin role if not exists
+    INSERT INTO public.user_roles (user_id, role, created_at)
+    VALUES (owner_id, 'super_admin', now())
+    ON CONFLICT (user_id, role) DO NOTHING;
+  END IF;
+END $$;
+
+-- Step 5: Apply same access rules to other key tables
+-- Update clients table
+DROP POLICY IF EXISTS "Clients view own record" ON public.clients;
+CREATE POLICY "Clients and staff view clients" ON public.clients 
+  FOR SELECT TO authenticated 
+  USING (
+    user_id = auth.uid() 
+    OR public.has_role(auth.uid(), 'admin')
+    OR public.has_role(auth.uid(), 'staff')
+    OR public.is_super_admin(auth.uid())
+  );
+
+-- Update bookings table
+DROP POLICY IF EXISTS "Users view own bookings" ON public.bookings;
+CREATE POLICY "Users and staff view bookings" ON public.bookings 
+  FOR SELECT TO authenticated 
+  USING (
+    user_id = auth.uid() 
+    OR public.has_role(auth.uid(), 'admin')
+    OR public.has_role(auth.uid(), 'staff')
+    OR public.is_super_admin(auth.uid())
+  );
+
+DROP POLICY IF EXISTS "Staff manage bookings" ON public.bookings;
+CREATE POLICY "Staff and admins manage bookings" ON public.bookings 
+  FOR UPDATE TO authenticated 
+  USING (
+    public.has_role(auth.uid(), 'admin')
+    OR public.has_role(auth.uid(), 'staff')
+    OR public.is_super_admin(auth.uid())
+  );
+
+COMMIT;
