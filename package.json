@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "ensure-super-admin": "node scripts/ensure-super-admin.js admin@hadeestrading.co.za",
+    "copy-prompt": "powershell -File scripts/copy-prompt.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
