@@ -1,6 +1,6 @@
 
 -- LEADS
-CREATE TABLE public.leads (
+CREATE TABLE IF NOT EXISTS public.leads (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT,
@@ -25,7 +25,7 @@ CREATE POLICY "Admins can delete leads" ON public.leads FOR DELETE TO authentica
 CREATE TRIGGER trg_leads_updated BEFORE UPDATE ON public.leads FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- CLIENTS
-CREATE TABLE public.clients (
+CREATE TABLE IF NOT EXISTS public.clients (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   company TEXT,
@@ -43,7 +43,7 @@ CREATE POLICY "Staff manage clients" ON public.clients FOR ALL TO authenticated 
 CREATE TRIGGER trg_clients_updated BEFORE UPDATE ON public.clients FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ORDERS
-CREATE TABLE public.orders (
+CREATE TABLE IF NOT EXISTS public.orders (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   client_id UUID NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE POLICY "Staff manage orders" ON public.orders FOR ALL TO authenticated US
 CREATE TRIGGER trg_orders_updated BEFORE UPDATE ON public.orders FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- DOCUMENTS
-CREATE TABLE public.documents (
+CREATE TABLE IF NOT EXISTS public.documents (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   client_id UUID REFERENCES public.clients(id) ON DELETE CASCADE,
   order_id UUID REFERENCES public.orders(id) ON DELETE SET NULL,
@@ -89,7 +89,7 @@ CREATE POLICY "Staff manage documents" ON public.documents FOR ALL TO authentica
 CREATE TRIGGER trg_documents_updated BEFORE UPDATE ON public.documents FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- BOOKINGS
-CREATE TABLE public.bookings (
+CREATE TABLE IF NOT EXISTS public.bookings (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   name TEXT NOT NULL,
