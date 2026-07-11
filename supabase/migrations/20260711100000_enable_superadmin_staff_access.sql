@@ -51,15 +51,18 @@ CREATE POLICY "super_admin_leads_full_access" ON public.leads
   USING (public.is_super_admin(auth.uid()))
   WITH CHECK (public.is_super_admin(auth.uid()));
 
--- Step 4: Ensure superadmin role exists for owner
+-- Step 4: Ensure admin@hadeestrading.co.za has all access roles (super_admin, admin, staff)
 DO $$
 DECLARE owner_id uuid;
 BEGIN
   SELECT id INTO owner_id FROM auth.users WHERE lower(email) = 'admin@hadeestrading.co.za' LIMIT 1;
   IF owner_id IS NOT NULL THEN
-    -- Insert superadmin role if not exists
+    -- Insert all roles for full access if not exists
     INSERT INTO public.user_roles (user_id, role, created_at)
-    VALUES (owner_id, 'super_admin', now())
+    VALUES 
+      (owner_id, 'super_admin', now()),
+      (owner_id, 'admin', now()),
+      (owner_id, 'staff', now())
     ON CONFLICT (user_id, role) DO NOTHING;
   END IF;
 END $$;
